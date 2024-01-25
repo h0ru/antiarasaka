@@ -69,6 +69,7 @@ iex (irm https://raw.githubusercontent.com/h0ru/antiarasaka/main/aka/aka.ps1)
 - Good references to LOLBINS: [The LOLBAS Project](https://mitre-attack.github.io/attack-navigator/#layerURL=https://lolbas-project.github.io/mitre_attack_navigator_layer.json)
 - How to use AntiArasaka-Binarie.:
 ```
+AntiArasaka-Binarie
 AntiArasaka-Binarie -Filter .exe, .dll, .ps1
 AntiArasaka-Binarie -Filter .vbs
 AntiArasaka-Binarie -Name cmd.exe
