@@ -11,7 +11,7 @@
 - - -
 
 > [!NOTE] 
-> **This tool explores ideas that have already been developed in my previous projects, but it was created to optimize and also motivate me to create something larger.**\
+> **This project explores ideas that have already been developed in my previous projects, but it was created to optimize and also motivate me to create something larger.**\
 > **Being a fan of the Cyberpunk 2077 story, I sought inspiration in "something" that could counter Arasaka. So here is the idea: AntiArasaka T00l K1t.**
 
 - - -
