@@ -89,3 +89,10 @@ AntiArasaka-Binarie -Name winrm.vbs
 ```
 
 - - -
+
+> [!IMPORTANT]
+> - [❗] More updates will come and Anti-Arasaka will have more features!
+> - [❗] Did you like the idea and the work? Show your support with a ⭐ to stay updated.
+> - [❗] If you're interested in helping or sharing your opinion, reach out to me through public channels or on Discord at **ph4nt0m.zip**.
+
+- - - 
