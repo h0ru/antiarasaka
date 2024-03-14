@@ -302,60 +302,67 @@ ModAllPShells
 }
 
 function AntiArasaka-Sweep {
-Add-Type @"
-    using System;
-    using System.Net.NetworkInformation;
-    using System.Threading.Tasks;
+    param(
+        [string]$IPAddress
+    )
 
-    public class PingSweepX {
-        public static void Main(string[] args) {
-            if (args.Length != 1) {
-                Console.WriteLine("[>] Developed by H0ru, check more on https://github.com/h0ru/icmp-quickhacks");
-                return;
-            }
+    function Invoke-Parallel {
+        param(
+            [scriptblock]$ScriptBlock,
+            [array]$ArgumentList
+        )
 
-            string IPAddress = args[0];
+        $runspaces = @()
 
-            Console.WriteLine("\n[>] Starting the scanning at: " + GetIpBase(IPAddress) + "...\n");
-
-            PingSweep(GetIpBase(IPAddress), 1, 255);
-
-            Console.WriteLine("\nFinished!");
-        }
-
-        public static string GetIpBase(string IPAddress) {
-            string[] octets = IPAddress.Split('.');
-            if (octets.Length == 4) {
-                return string.Format("{0}.{1}.{2}", octets[0], octets[1], octets[2]);
-            }
-            return IPAddress;
-        }
-
-        public static void PingSweep(string IPBase, int StartRange, int endRange) {
-            var tasks = new Task[endRange - StartRange + 1];
-
-            for (int i = StartRange; i <= endRange; i++) {
-                string targetIpAddress = string.Format("{0}.{1}", IPBase, i);
-                tasks[i - StartRange] = PingHost(targetIpAddress);
-            }
-
-            Task.WaitAll(tasks); // Wait for all tasks to complete
-
-            for (int i = 0; i < tasks.Length; i++) {
-                string targetIpAddress = string.Format("{0}.{1}", IPBase, i + StartRange);
-                PingReply reply = (tasks[i] as Task<PingReply>).Result;
-
-                if (reply.Status == IPStatus.Success) {
-                    Console.WriteLine("[+] Host " + targetIpAddress + " Online");
-                }
+        foreach ($arg in $ArgumentList) {
+            $runspace = [runspacefactory]::CreateRunspace()
+            $runspace.Open()
+            $powershell = [powershell]::Create().AddScript($ScriptBlock).AddArgument($arg)
+            $powershell.Runspace = $runspace
+            $job = $powershell.BeginInvoke()
+            $runspaces += [PSCustomObject]@{
+                PowerShell = $powershell
+                Job = $job
             }
         }
 
-        public static Task<PingReply> PingHost(string IPAddress) {
-            var ping = new Ping();
-            return ping.SendPingAsync(IPAddress, timeout: 1000);
+        $results = @()
+
+        foreach ($runspace in $runspaces) {
+            $runspace.PowerShell.EndInvoke($runspace.Job)
+            $results += $runspace.PowerShell
+        }
+
+        return $results
+    }
+
+    Write-Host "[>] Developed by H0ru, check more on https://github.com/h0ru/icmp-quickhacks"
+    Write-Host ""
+    Write-Host "[>] Starting the scanning at: $IPAddress ..."
+
+    $IPBase = $IPAddress -split '\.'
+    $IPBase = $IPBase[0..2] -join '.'
+
+    $tasks = @()
+
+    for ($i = 1; $i -le 255; $i++) {
+        $targetIpAddress = "$IPBase.$i"
+        $ping = New-Object System.Net.NetworkInformation.Ping
+        $tasks += $ping.SendPingAsync($targetIpAddress, 1000)
+    }
+
+    $results = Invoke-Parallel -ScriptBlock {
+        param($task)
+        $task.Wait()
+        return $task.Result
+    } -ArgumentList $tasks
+
+    foreach ($result in $results) {
+        if ($result.Status -eq "Success") {
+            Write-Host "[+] Host $($result.Address) Online"
         }
     }
-"@
-[PingSweepX]::Main($args)
+
+    Write-Host ""
+    Write-Host "Finished!"
 }
